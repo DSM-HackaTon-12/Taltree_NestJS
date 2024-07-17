@@ -41,4 +41,14 @@ export class UserController {
 
     return res.status(200).json(data).send();
   }
+
+  @Get('mypage')
+  async getMyInfo(
+    @Headers('Authorization') token: string,
+    @Res() res: Response,
+  ) {
+    const data = await this.userService.getMyInfo(token);
+
+    return res.status(200).json(data).send();
+  }
 }

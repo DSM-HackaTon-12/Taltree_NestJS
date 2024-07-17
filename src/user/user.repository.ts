@@ -24,11 +24,11 @@ export class UserRepository {
     return newUser;
   }
 
-//   async existsUser(userId: number): Promise<boolean> {
-//     const existsUser = await this.userEntity.existsBy({ user_id: userId });
+  //   async existsUser(userId: number): Promise<boolean> {
+  //     const existsUser = await this.userEntity.existsBy({ user_id: userId });
 
-//     return existsUser;
-//   }
+  //     return existsUser;
+  //   }
 
   async findUserByEmail(email: string): Promise<User> {
     const existsEmail = await this.userEntity.findOneBy({ email });
@@ -36,13 +36,14 @@ export class UserRepository {
     return existsEmail;
   }
 
-  async getOneUser(userId: number): Promise<User> {
+  async getMyInfo(user_id: number): Promise<User> {
     const user = await this.userEntity
       .createQueryBuilder('qb')
-      .select(['id', 'nickname', 'email', 'profileImageUrl', 'shortInform'])
-      .where('qb.id = :userId', { userId })
-      .getOne();
+      .select(['user_id', 'username', 'email', 'profile_url'])
+      .where('qb.user_id = :user_id', { user_id })
+      .getRawOne();
 
+    console.log(user);
     return user;
   }
 }
