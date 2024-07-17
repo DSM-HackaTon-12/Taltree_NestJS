@@ -74,9 +74,4 @@ export class PostController {
       .json({ posts: await this.postService.readAllMyPost(token) })
       .send();
   }
-
-  @Get('/:postId')
-  async getPostDetail(@Param('postId') postId: number) {
-    return { post: await this.postService.getPostDetail(postId) };
-  }
 }

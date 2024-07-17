@@ -44,35 +44,6 @@ export class PostService {
     return await this.postRepository.readAllPost();
   }
 
-  async getPostDetail(postId: number) {
-    const {
-      writer_id,
-      title,
-      content,
-      address,
-      contact,
-      start_date,
-      end_date,
-      image_url,
-    } = await this.postRepository.findOnePost(postId);
-    const writer = await this.userRepository.getMyInfo(writer_id);
-
-    return {
-      writer: {
-        username: writer.username,
-        profile: writer.profile_url,
-        email: writer.email,
-      },
-      title,
-      content,
-      address,
-      contact,
-      startDate: start_date,
-      endDate: end_date,
-      img: image_url,
-    };
-  }
-
   async readAllMyPost(token: string) {
     const { user_id } = await this.userService.validateAccess(token);
 
