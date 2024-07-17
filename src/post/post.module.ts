@@ -18,11 +18,6 @@ import { Post } from './entity/post.entity';
     }),
   ],
   controllers: [PostController],
-  providers: [
-    PostService,
-    PostRepository,
-    UserService,
-    UserRepository,
-  ],
+  providers: [PostService, PostRepository, UserService, UserRepository],
 })
 export class PostModule {}

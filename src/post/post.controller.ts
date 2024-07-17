@@ -18,13 +18,21 @@ export class PostController {
 
   @Post('create')
   async createPost(
-    @Headers('Authorization') token: string,
-    @Body() dto: PostRequestDto,
     @Res() res: Response,
+    @Body() dto: PostRequestDto,
+    @Headers('Authorization') token: string,
   ) {
     await this.postService.createPost(token, dto);
 
     return res.status(201).json('Created').send();
+  }
+
+  @Patch('apply/:postId')
+  async apply(
+    @Headers('Authorization') token: string,
+    @Param('postId') postId: string,
+  ) {
+    await this.postService.apply(token, Number.parseInt(postId));
   }
 
   @Patch('/:post_id')
@@ -39,19 +47,11 @@ export class PostController {
     return res.status(200).json('Ok').send();
   }
 
-  @Patch('apply/:postId')
-  async apply(
-    @Headers('Authorization') token: string,
-    @Param('postId') postId: string,
-  ) {
-    await this.postService.apply(token, Number.parseInt(postId));
-  }
-
   // 메인 페이지 글 목록 조회 (Home)
   @Get('mainpage')
   async readAllPost(
-    @Headers('Authorization') token: string,
     @Res() res: Response,
+    @Headers('Authorization') token: string,
   ) {
     return res
       .status(200)
@@ -59,19 +59,19 @@ export class PostController {
       .send();
   }
 
-  @Get('/:postId')
-  async getPostDetail(@Param('postId') postId: number) {
-    return { post: await this.postService.getPostDetail(postId) };
-  }
-
   @Get('writed')
   async readAllMyPost(
-    @Headers('Authorization') token: string,
     @Res() res: Response,
+    @Headers('Authorization') token: string,
   ) {
     return res
       .status(200)
       .json({ posts: await this.postService.readAllMyPost(token) })
       .send();
+  }
+
+  @Get('/:postId')
+  async getPostDetail(@Param('postId') postId: number) {
+    return { post: await this.postService.getPostDetail(postId) };
   }
 }

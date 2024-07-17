@@ -38,7 +38,10 @@ export class Post {
   @Column()
   end_date: string;
 
-  @Column()
+  @Column({
+    default:
+      'https://taltree-s3.s3.ap-northeast-2.amazonaws.com/defultImg.jpeg',
+  })
   image_url: string;
 
   @ManyToOne(() => User, (user) => user.posts)
