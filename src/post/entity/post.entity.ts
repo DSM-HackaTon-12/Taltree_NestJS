@@ -33,10 +33,10 @@ export class Post {
   contact: string;
 
   @Column()
-  start_date: Date;
+  start_date: string;
 
   @Column()
-  end_date: Date;
+  end_date: string;
 
   @Column()
   image_url: string;

@@ -5,6 +5,9 @@ import { ReviewModule } from './review/review.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configDotenv } from 'dotenv';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
+import { ImageModule } from './image/image.module';
 
 configDotenv();
 
@@ -13,6 +16,7 @@ configDotenv();
     UserModule,
     PostModule,
     ReviewModule,
+    ImageModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -21,7 +25,7 @@ configDotenv();
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/entity/*.js'],
-      synchronize: true,
+      synchronize: false,
       logging: false,
       migrations: [__dirname + '/**/migrations/*.js'],
       migrationsTableName: 'migrations',
@@ -38,6 +42,11 @@ configDotenv();
     }),
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
