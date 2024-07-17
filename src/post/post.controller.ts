@@ -63,4 +63,20 @@ export class PostController {
   async getPostDetail(@Param('postId') postId: number) {
     return { post: await this.postService.getPostDetail(postId) };
   }
+
+  @Get('writed')
+  async readAllMyPost(
+    @Headers('Authorization') token: string,
+    @Res() res: Response,
+  ) {
+    return res
+      .status(200)
+      .json({ posts: await this.postService.readAllMyPost(token) })
+      .send();
+  }
+
+  @Get('/:postId')
+  async getPostDetail(@Param('postId') postId: number) {
+    return { post: await this.postService.getPostDetail(postId) };
+  }
 }

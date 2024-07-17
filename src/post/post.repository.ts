@@ -67,4 +67,22 @@ export class PostRepository {
 
     return posts;
   }
+
+  async readAllMyPost(user_id: number) {
+    const posts = await this.postEntity
+      .createQueryBuilder('post')
+      .select([
+        'post.post_id AS post_id',
+        'post.title AS title',
+        'post.address AS address',
+        'post.start_date AS start_date',
+        'post.end_date AS end_date',
+        'post.image_url AS image_url',
+      ])
+      .where('post.writer_id = :writer_id', { writer_id: user_id })
+      .orderBy('post.post_id', 'DESC')
+      .getRawMany();
+
+    return posts;
+  }
 }
