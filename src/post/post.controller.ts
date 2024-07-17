@@ -37,4 +37,13 @@ export class PostController {
 
     return res.status(200).json('Ok').send();
   }
+
+  @Patch('apply/:postId')
+  async apply(
+    @Headers('Authorization') token: string,
+    @Param('postId') postId: string,
+  ) {
+    console.log(postId);
+    await this.postService.apply(token, Number.parseInt(postId));
+  }
 }

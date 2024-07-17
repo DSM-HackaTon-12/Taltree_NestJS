@@ -45,4 +45,8 @@ export class PostRepository {
   async findOnePost(post_id: number) {
     return await this.postEntity.findOneBy({ post_id });
   }
+
+  async updateApplier(post_id: number, applicant_id: number) {
+    await this.postEntity.update({ post_id }, { applicant_id });
+  }
 }
