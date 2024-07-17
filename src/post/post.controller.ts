@@ -44,7 +44,6 @@ export class PostController {
     @Headers('Authorization') token: string,
     @Param('postId') postId: string,
   ) {
-    console.log(postId);
     await this.postService.apply(token, Number.parseInt(postId));
   }
 
@@ -58,5 +57,10 @@ export class PostController {
       .status(200)
       .json({ posts: await this.postService.readAllPost(token) })
       .send();
+  }
+
+  @Get('/:postId')
+  async getPostDetail(@Param('postId') postId: number) {
+    return { post: await this.postService.getPostDetail(postId) };
   }
 }

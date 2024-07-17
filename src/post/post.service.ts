@@ -6,11 +6,13 @@ import {
 import { PostRepository } from './post.repository';
 import { PostRequestDto } from './dto/post.dto';
 import { UserService } from 'src/user/user.service';
+import { UserRepository } from 'src/user/user.repository';
 
 @Injectable()
 export class PostService {
   constructor(
     private readonly postRepository: PostRepository,
+    private readonly userRepository: UserRepository,
     private readonly userService: UserService,
   ) {}
 
@@ -40,5 +42,34 @@ export class PostService {
     await this.userService.validateAccess(token);
 
     return await this.postRepository.readAllPost();
+  }
+
+  async getPostDetail(postId: number) {
+    const {
+      writer_id,
+      title,
+      content,
+      address,
+      contact,
+      start_date,
+      end_date,
+      image_url,
+    } = await this.postRepository.findOnePost(postId);
+    const writer = await this.userRepository.getMyInfo(writer_id);
+
+    return {
+      writer: {
+        username: writer.username,
+        profile: writer.profile_url,
+        email: writer.email,
+      },
+      title,
+      content,
+      address,
+      contact,
+      startDate: start_date,
+      endDate: end_date,
+      img: image_url,
+    };
   }
 }
