@@ -16,6 +16,7 @@ import { PostRequestDto } from './dto/post.dto';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  // 게시글 작성
   @Post('create')
   async createPost(
     @Res() res: Response,
@@ -27,6 +28,7 @@ export class PostController {
     return res.status(201).json('Created').send();
   }
 
+  // 활동 신청
   @Patch('apply/:postId')
   async apply(
     @Headers('Authorization') token: string,
@@ -35,6 +37,7 @@ export class PostController {
     await this.postService.apply(token, Number.parseInt(postId));
   }
 
+  // 게시글 수정
   @Patch('/:post_id')
   async updatePost(
     @Headers('Authorization') token: string,
@@ -59,6 +62,7 @@ export class PostController {
       .send();
   }
 
+  // 내가 작성한 글 목록 조회
   @Get('writed')
   async readAllMyPost(
     @Res() res: Response,
@@ -70,6 +74,7 @@ export class PostController {
       .send();
   }
 
+  // 내가 신청한 글 목록 조회
   @Get('applied')
   async readAllMyAppliedPost(
     @Res() res: Response,
@@ -82,6 +87,19 @@ export class PostController {
       .send();
   }
 
+  // 내가 참여자한테 리뷰해야 할 글 목록 조회
+  @Get('review')
+  async readAllPostINeedToReviewToApplicant(
+    @Res() res: Response,
+    @Headers('Authorization') token: string,
+  ) {
+    return res
+      .status(200)
+      .json({ posts: await this.postService.readAllPostINeedToReviewToApplicant(token) })
+      .send();
+  }
+
+  // 게시글 상세 조회
   @Get('/:postId')
   async getPostDetail(
     @Param('postId') postId: number,

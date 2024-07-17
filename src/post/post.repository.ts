@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './entity/post.entity';
 import { PostRequestDto } from './dto/post.dto';
+import { User } from 'src/user/entity/user.entity';
 
 @Injectable()
 export class PostRepository {
@@ -99,6 +100,31 @@ export class PostRepository {
         'post.image_url AS image_url',
       ])
       .where('post.applicant_id = :applicant_id', { applicant_id: user_id })
+      .orderBy('post.post_id', 'DESC')
+      .getRawMany();
+
+    return posts;
+  }
+
+  async readAllPostINeedToReviewToApplicant(user_id: number) {
+    const posts = await this.postEntity
+      .createQueryBuilder('post')
+      .select([
+        'post.post_id AS post_id',
+        'post.title AS title',
+        'post.address AS address',
+        'post.start_date AS start_date',
+        'post.end_date AS end_date',
+        'post.image_url AS image_url',
+      ])
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('user.username')
+          .from(User, 'user')
+          .where('user.user_id = post.applicant_id');
+      }, 'applicant_name')
+      .where('post.writer_id = :writer_id', { writer_id: user_id })
+      .andWhere('post.applicant_id is not null')
       .orderBy('post.post_id', 'DESC')
       .getRawMany();
 

@@ -86,4 +86,10 @@ export class PostService {
 
     return await this.postRepository.readAllMyAppliedPost(user_id);
   }
+
+  async readAllPostINeedToReviewToApplicant(token: string) {
+    const { user_id } = await this.userService.validateAccess(token);
+
+    return await this.postRepository.readAllPostINeedToReviewToApplicant(user_id);
+  }
 }
