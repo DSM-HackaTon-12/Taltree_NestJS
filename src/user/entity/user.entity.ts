@@ -16,7 +16,9 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({
+    default: 'https://taltree-s3.s3.ap-northeast-2.amazonaws.com/user.png',
+  })
   profile_url: string;
 
   @OneToMany(() => Post, (post) => post.user, {
