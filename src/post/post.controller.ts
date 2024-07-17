@@ -70,8 +70,23 @@ export class PostController {
       .send();
   }
 
+  @Get('applied')
+  async readAllMyAppliedPost(
+    @Res() res: Response,
+    @Headers('Authorization') token: string,
+  ) {
+    // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InNveWVvbmtpbTAyMjdAZHNtLmhzLmtyIiwiaWF0IjoxNzIxMjIxMDk3LCJleHAiOjE3MjEyMjgyOTd9.7wi1-rIG_GI-ApDWpnIrflWhYuDWAPQo0FoWDFXG_yY';
+    return res
+      .status(200)
+      .json({ posts: await this.postService.readAllMyAppliedPost(token) })
+      .send();
+  }
+
   @Get('/:postId')
-  async getPostDetail(@Param('postId') postId: number) {
-    return { post: await this.postService.getPostDetail(postId) };
+  async getPostDetail(
+    @Param('postId') postId: number,
+    @Headers('Authorization') token: string,
+  ) {
+    return { post: await this.postService.getPostDetail(token, postId) };
   }
 }

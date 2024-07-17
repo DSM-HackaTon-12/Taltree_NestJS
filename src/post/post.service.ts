@@ -50,7 +50,9 @@ export class PostService {
     return await this.postRepository.readAllMyPost(user_id);
   }
 
-  async getPostDetail(postId: number) {
+  async getPostDetail(token: string, postId: number) {
+    await this.userService.validateAccess(token);
+
     const {
       writer_id,
       title,
@@ -77,5 +79,11 @@ export class PostService {
       endDate: end_date,
       img: image_url,
     };
+  }
+
+  async readAllMyAppliedPost(token: string) {
+    const { user_id } = await this.userService.validateAccess(token);
+
+    return await this.postRepository.readAllMyAppliedPost(user_id);
   }
 }
