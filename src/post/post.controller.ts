@@ -1,7 +1,15 @@
-import { Body, Controller, Headers, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Headers,
+  Param,
+  Patch,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostRequestDto } from './dto/post.dto';
 import { Response } from 'express';
+import { PostRequestDto } from './dto/post.dto';
 
 @Controller('post')
 export class PostController {
@@ -10,11 +18,23 @@ export class PostController {
   @Post('create')
   async createPost(
     @Headers('Authorization') token: string,
-    @Body() dto: CreatePostRequestDto,
+    @Body() dto: PostRequestDto,
     @Res() res: Response,
   ) {
     await this.postService.createPost(token, dto);
 
     return res.status(201).json('Created').send();
+  }
+
+  @Patch('/:post_id')
+  async updatePost(
+    @Headers('Authorization') token: string,
+    @Param('post_id') post_id: number,
+    @Body() dto: PostRequestDto,
+    @Res() res: Response,
+  ) {
+    await this.postService.updatePost(token, post_id, dto);
+
+    return res.status(200).json('Ok').send();
   }
 }

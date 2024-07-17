@@ -15,7 +15,6 @@ import { LoginRequestDto } from './dto/login.dto';
 import { SignupRequestDto } from './dto/signup.dto';
 import { UserPayloadDto } from './dto/userPayload.dto';
 import { UserRepository } from './user.repository';
-import { JwtStrategy } from 'src/jwt/jwt.strategy';
 
 configDotenv();
 
@@ -32,7 +31,6 @@ export class UserService {
     private readonly userRepository: UserRepository,
     @InjectRedis() private readonly redis: Redis,
     private jwt: JwtService,
-    private readonly jwtStrategy: JwtStrategy,
   ) {
     this.tranporter = nodemailer.createTransport({
       service: 'gmail',
@@ -132,28 +130,22 @@ export class UserService {
     return refreshToken;
   }
 
-  async validateRefresh(refreshToken: string): Promise<object> {
-    const refreshtoken = refreshToken.split(' ')[1];
+  async validateAccess(accesstoken: string): Promise<UserPayloadDto> {
+    accesstoken = accesstoken.split(' ')[1];
+    console.log(accesstoken);
 
-    const refresh = await this.jwt.verify(refreshtoken, {
-      secret: process.env.JWT_SECRET_REFRESH,
+    const access = await this.jwt.verify(accesstoken, {
+      secret: process.env.JWT_SECRET_ACCESS,
     });
 
-    if (!refresh) throw new UnauthorizedException('재로그인 필요');
+    if (!access) throw new UnauthorizedException('리프레시 토큰 검증 필요');
 
-    const accessToken = await this.getAccessToken({
-      user_id: refresh.user_id,
-      email: refresh.email,
-    });
-
-    return {
-      accessToken,
-      refreshToken,
-    };
+    console.log(access);
+    return access;
   }
 
   async getMyInfo(token: string) {
-    const { user_id } = await this.jwtStrategy.validateAccess(token);
+    const { user_id } = await this.validateAccess(token);
 
     return await this.userRepository.getMyInfo(user_id);
   }

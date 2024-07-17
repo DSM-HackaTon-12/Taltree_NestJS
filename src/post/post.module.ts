@@ -4,7 +4,6 @@ import { PostService } from './post.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PostRepository } from './post.repository';
-import { JwtStrategy } from 'src/jwt/jwt.strategy';
 import { User } from 'src/user/entity/user.entity';
 import { UserService } from 'src/user/user.service';
 import { UserRepository } from 'src/user/user.repository';
@@ -22,7 +21,6 @@ import { Post } from './entity/post.entity';
   providers: [
     PostService,
     PostRepository,
-    JwtStrategy,
     UserService,
     UserRepository,
   ],

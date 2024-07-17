@@ -32,16 +32,6 @@ export class UserController {
     return res.status(200).json(data).send();
   }
 
-  @Get('token')
-  async validateRefresh(
-    @Headers('Authorization') refreshToken: string,
-    @Res() res: Response,
-  ): Promise<object> {
-    const data = await this.userService.validateRefresh(refreshToken);
-
-    return res.status(200).json(data).send();
-  }
-
   @Get('mypage')
   async getMyInfo(
     @Headers('Authorization') token: string,
