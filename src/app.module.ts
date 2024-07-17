@@ -4,6 +4,7 @@ import { PostModule } from './post/post.module';
 import { ReviewModule } from './review/review.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configDotenv } from 'dotenv';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 configDotenv();
 
@@ -26,6 +27,14 @@ configDotenv();
       migrationsTableName: 'migrations',
       autoLoadEntities: true,
       timezone: 'Asia/Seoul',
+    }),
+    RedisModule.forRoot({
+      readyLog: true,
+      config: {
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
+        password: process.env.REDIS_PASS,
+      },
     }),
   ],
   controllers: [],
