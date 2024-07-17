@@ -1,8 +1,17 @@
 import { Response } from 'express';
 import { UserService } from './user.service';
-import { Body, Controller, Get, Headers, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Patch,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { LoginRequestDto } from './dto/login.dto';
 import { SignupRequestDto } from './dto/signup.dto';
+import { UpdateMyInfoRequestDto } from './dto/updateMyInfo.dto';
 
 @Controller('user')
 export class UserController {
@@ -40,5 +49,16 @@ export class UserController {
     const data = await this.userService.getMyInfo(token);
 
     return res.status(200).json(data).send();
+  }
+
+  @Patch('mypage')
+  async updateMyInfo(
+    @Res() res: Response,
+    @Body() dto: UpdateMyInfoRequestDto,
+    @Headers('Authorization') token: string,
+  ) {
+    const data = await this.userService.updateMyInfo(token, dto);
+
+    return res.status(200).json('Ok').send();
   }
 }

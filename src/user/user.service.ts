@@ -15,6 +15,7 @@ import { LoginRequestDto } from './dto/login.dto';
 import { SignupRequestDto } from './dto/signup.dto';
 import { UserPayloadDto } from './dto/userPayload.dto';
 import { UserRepository } from './user.repository';
+import { UpdateMyInfoRequestDto } from './dto/updateMyInfo.dto';
 
 configDotenv();
 
@@ -148,5 +149,11 @@ export class UserService {
     const { user_id } = await this.validateAccess(token);
 
     return await this.userRepository.getMyInfo(user_id);
+  }
+
+  async updateMyInfo(token: string, dto: UpdateMyInfoRequestDto) {
+    const { user_id } = await this.validateAccess(token);
+
+    return await this.userRepository.update(user_id, dto);
   }
 }

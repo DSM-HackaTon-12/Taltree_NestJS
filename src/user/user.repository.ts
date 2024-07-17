@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SignupRequestDto } from 'src/user/dto/signup.dto';
 import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
+import { UpdateMyInfoRequestDto } from './dto/updateMyInfo.dto';
 
 @Injectable()
 export class UserRepository {
@@ -45,5 +46,9 @@ export class UserRepository {
 
     console.log(user);
     return user;
+  }
+
+  async update(user_id: number, dto: UpdateMyInfoRequestDto) {
+    return this.userEntity.update(user_id, dto);
   }
 }
