@@ -35,4 +35,10 @@ export class PostService {
     const { user_id } = await this.userService.validateAccess(token);
     await this.postRepository.updateApplier(postId, user_id);
   }
+
+  async readAllPost(token: string) {
+    await this.userService.validateAccess(token);
+
+    return await this.postRepository.readAllPost();
+  }
 }

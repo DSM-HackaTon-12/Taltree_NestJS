@@ -49,4 +49,22 @@ export class PostRepository {
   async updateApplier(post_id: number, applicant_id: number) {
     await this.postEntity.update({ post_id }, { applicant_id });
   }
+
+  async readAllPost() {
+    const posts = await this.postEntity
+      .createQueryBuilder('post')
+      .select([
+        'post.post_id AS post_id',
+        'post.title AS title',
+        'post.address AS address',
+        'post.start_date AS start_date',
+        'post.end_date AS end_date',
+        'post.image_url AS image_url',
+      ])
+      .where('ISNULL(post.applicant_id)')
+      .orderBy('post.post_id', 'DESC')
+      .getRawMany();
+
+    return posts;
+  }
 }

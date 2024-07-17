@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Headers,
   Param,
   Patch,
@@ -45,5 +46,17 @@ export class PostController {
   ) {
     console.log(postId);
     await this.postService.apply(token, Number.parseInt(postId));
+  }
+
+  // 메인 페이지 글 목록 조회 (Home)
+  @Get('mainpage')
+  async readAllPost(
+    @Headers('Authorization') token: string,
+    @Res() res: Response,
+  ) {
+    return res
+      .status(200)
+      .json({ posts: await this.postService.readAllPost(token) })
+      .send();
   }
 }
